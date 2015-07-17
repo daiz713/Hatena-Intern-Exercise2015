@@ -9,18 +9,20 @@ function parseLTSVLog(logStr) {
 
   var logLines = logStr.split('\n');
   // それぞれのログに対して:
-  for(var i = 0; i < logLines.length-1; i++) {
+  for(var i = 0; i < logLines.length; i++) {
     var logLine = logLines[i];           // ログ1行分
-    var logPears = logLine.split('\t');  // ログ1行に含まれるLabel-Valueペアの配列
-    // それぞれのペアに対して:
-    var logObj = {};
-    for(var j = 0; j < logPears.length; j++) {
-      var label = logPears[j].split(':')[0];
-      var val = logPears[j].split(':')[1];
-      if(label === EPOCH) val = Number(val);
-      logObj[label] = val;
-    } 
-    res.push(logObj);
+    if(logLine != '') {
+      var logPears = logLine.split('\t');  // ログ1行に含まれるLabel-Valueペアの配列
+      // それぞれのペアに対して:
+      var logObj = {};
+      for(var j = 0; j < logPears.length; j++) {
+        var label = logPears[j].split(':')[0];
+        var val = logPears[j].split(':')[1];
+        if(label === EPOCH) val = Number(val);
+        logObj[label] = val;
+      } 
+      res.push(logObj);
+    }
   }
   
   return res;
