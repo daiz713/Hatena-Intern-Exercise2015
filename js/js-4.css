@@ -1,0 +1,14 @@
+#option-container {
+  background-color: #e9e7e4;
+  padding: 12px;
+  border-radius: 4px;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.opt {
+  padding: 6px;
+}
+#option-elem-template {
+  display: none;
+}

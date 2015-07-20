@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Hatena-Intern-Exercise : JavaScript</title>
+  <link rel="stylesheet" href="js-3.css" />
+  <link rel="stylesheet" href="js-4.css" />
+</head>
+<body>
+  <section>
+    <h1>JavaScript 事前課題</h1>
+    <h2>課題 JS-3 : イベントリスナを使用する</h2>
+    <p>「表に出力する」 ボタンをクリックすると、テキストエリアに入力したログデータが表として表示されるようにしてください。 その際、課題 JS-1 と JS-2 で作成した関数を使用してください。</p>
+    <p>また、表 (table 要素) は table-container を id として持つ div 要素の子要素として作成するようにしてください。</p>
+    <div>
+      <textarea id="log-input" cols="64" rows="10">path:/&#x0009;epoch:123456
+path:/uname&#x0009;epoch:500000
+path:/help&#x0009;epoch:234222
+path:/&#x0009;epoch:94843
+</textarea>
+      <div><input value="表に出力する" type="button" id="submit-button" /></div>
+
+
+      <div id="option-elem-template">
+          <div class="opt">
+            <input type="checkbox" checked>
+            ラベル
+            <select class="opt-key" id="opt-key-0" value=""></select>の値が
+            <input class="opt-value" type="text" placeholder="任意" autocomplete="on" list="opt-suggest-0">で
+            <datalist id="opt-suggest-0" class="opt-suggest-list">
+               <option value="">
+            </datalist>
+            <select class="opt-tf">
+              <option value="t">ある</option>
+              <option value="f">ない</option>
+            </select>
+            ものを表示
+            <div class="opt-action"></div>
+          </div>
+      </div>
+      <div id="option-container">
+        <input type="button" id="option-add" value="条件を追加する">
+        <input type="button" id="option-add" value="条件を満たすものを表示する">
+        <div class="opts">
+        </div>
+      </div>
+
+    </div>
+    <div id="table-container"></div>
+
+    <br>
+    <br>
+  </section>
+  <script src="main.js"></script>
+  <script src="js-3.js"></script>
+  <script src="js-4.js"></script>
+</body>
+</html>
