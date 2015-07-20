@@ -1,6 +1,14 @@
 // 課題 JS-4 の内容
 "use strict";
 
+function addToArr(arr, elem) {
+  for(var k = 0; k < arr.length; k++) {
+    if(arr[k] === elem) return arr;
+  }
+  arr.push(elem);
+  return arr;
+}
+
 function createOptionItem(optElem) {
   // ログ文字列をオブジェクトに変換
   var logStr = document.querySelector('#log-input').value;
@@ -18,6 +26,7 @@ function createOptionItem(optElem) {
 }
 
 document.addEventListener('change', function(e) {
+  var a = [];
   if(e.target.className === 'opt-key') {
     var id_num = e.target.id.split('-')[2];
     console.log(id_num);
@@ -28,10 +37,14 @@ document.addEventListener('change', function(e) {
     // .opt-suggest-list の選択肢を生成
     var optSuggestListElem = document.querySelector('#opt-suggest-' + id_num);
     optSuggestListElem.innerHTML = '';
+    // 選択肢配列を更新
     for(var i = 0; i < logObj.length; i++) {
+      a = addToArr(a, logObj[i][key]);
+    }
+    for(i = 0; i < a.length; i++) {
       var opt = document.createElement('option');
-      opt.value = logObj[i][key];
-      opt.innerHTML = logObj[i][key];
+      opt.value = a[i];
+      opt.innerHTML = a[i];
       optSuggestListElem.appendChild(opt);
     }
   }
