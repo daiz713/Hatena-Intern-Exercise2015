@@ -9,12 +9,62 @@ function addToArr(arr, elem) {
   return arr;
 }
 
-function createOptionItem(optElem) {
+// 全ての条件を満たすかどうか、ログを一件ずつ確認する
+function generateCondRes(logObj) {
+  var res = true;
+  var conds = document.querySelector('.opts').children;
+  var condsLength = document.querySelector('.opts').childElementCount;
+  var and = document.querySelector('#option-and').checked;
+  var or = document.querySelector('#option-or').checked;
+  var and_or = 'and';
+  if(or) and_or = 'or';
+
+  var res = true;
+  for(var i = 0; i < condsLength; i++) {
+    var enable = conds[i].querySelector('.opt-enable').checked;
+    if(enable) {
+      var key = conds[i].querySelector('.opt-key').value;
+      var val = conds[i].querySelector('.opt-value').value;
+      if(val === '') val = logObj[key];
+      var eq_neq = conds[i].querySelector('.opt-eq').value;
+      if(eq_neq === 'eq') {
+        res = (and_or == 'and') ? (res && (logObj[key] == val)) : logObj[key] == val;
+      }else {
+        res = (and_or == 'and') ? (res && (logObj[key] != val)) : logObj[key] != val;
+      }
+    }
+  }
+  return res;
+}
+
+// セレクトボックス(Label)の内容に対応した選択肢を生成する
+function createOptionValues(id_num, key) {
+  var a = [];
   // ログ文字列をオブジェクトに変換
   var logStr = document.querySelector('#log-input').value;
-  var logObj = parseLTSVLog(logStr);
+  var logObjs = parseLTSVLog(logStr);
+  // .opt-suggest-list の選択肢を生成
+  var optSuggestListElem = document.querySelector('#opt-suggest-' + id_num);
+  optSuggestListElem.innerHTML = '';
+  // 選択肢配列を更新
+  for(var i = 0; i < logObjs.length; i++) {
+    a = addToArr(a, logObjs[i][key]);
+  }
+  for(i = 0; i < a.length; i++) {
+    var opt = document.createElement('option');
+    opt.value = a[i];
+    opt.innerHTML = a[i];
+    optSuggestListElem.appendChild(opt);
+  }
+}
+
+// セレクトボックス(Label)の選択肢を生成する
+function createOptionLabels(id_num, optElem) {
+  // ログ文字列をオブジェクトに変換
+  var logStr = document.querySelector('#log-input').value;
+  var logObjs = parseLTSVLog(logStr);
   // .opt-key の選択肢を生成
-  var keys = Object.keys(logObj[0]);
+  var keys = Object.keys(logObjs[0]);
   var optKeyElem = optElem.querySelector('.opt-key');
   for(var i = 0; i < keys.length; i++) {
     var opt = document.createElement('option');
@@ -23,30 +73,34 @@ function createOptionItem(optElem) {
     optKeyElem.appendChild(opt);
   }
   optKeyElem.value = keys[0];
+  createOptionValues(id_num, optKeyElem.value);
 }
 
+function searchLogs() {
+  // ログ文字列をオブジェクトに変換
+  var logStr = document.querySelector('#log-input').value;
+  var logObjs = parseLTSVLog(logStr);
+  // 表示するログオブジェクトを格納する配列を用意
+  var res = [];
+  // 表示するものを決定する
+  for(var i = 0; i < logObjs.length; i++) {
+    if(generateCondRes(logObjs[i]) === true) res.push(logObjs[i]);
+  }
+  return res;
+}
+
+document.querySelector('#option-do-search').addEventListener('click', function(e) {
+  var logs = searchLogs();
+  var container = document.querySelector('#table-container');
+  container.innerHTML = '';  // 前回の描画をクリアする
+  createLogTable(container, logs);
+}, false);
+
 document.addEventListener('change', function(e) {
-  var a = [];
   if(e.target.className === 'opt-key') {
     var id_num = e.target.id.split('-')[2];
-    console.log(id_num);
     var key = e.target.value;
-    // ログ文字列をオブジェクトに変換
-    var logStr = document.querySelector('#log-input').value;
-    var logObj = parseLTSVLog(logStr);
-    // .opt-suggest-list の選択肢を生成
-    var optSuggestListElem = document.querySelector('#opt-suggest-' + id_num);
-    optSuggestListElem.innerHTML = '';
-    // 選択肢配列を更新
-    for(var i = 0; i < logObj.length; i++) {
-      a = addToArr(a, logObj[i][key]);
-    }
-    for(i = 0; i < a.length; i++) {
-      var opt = document.createElement('option');
-      opt.value = a[i];
-      opt.innerHTML = a[i];
-      optSuggestListElem.appendChild(opt);
-    }
+    createOptionValues(id_num, key);
   }
 }, false);
 
@@ -61,6 +115,6 @@ document.querySelector('#option-add').addEventListener('click', function(e) {
   optElem.querySelector('.opt-value').setAttribute('list', 'opt-suggest-' + (num_opts + 1));
   optElem.querySelector('.opt-suggest-list').id = 'opt-suggest-' + (num_opts + 1);
   // セレクトボックス .opt-key 選択肢を生成
-  createOptionItem(optElem);
   optContainer.appendChild(optElem);
+  createOptionLabels(num_opts + 1, optElem);
 }, false);
