@@ -16,10 +16,14 @@ function generateCondRes(logObj) {
   var condsLength = document.querySelector('.opts').childElementCount;
   var and = document.querySelector('#option-and').checked;
   var or = document.querySelector('#option-or').checked;
-  var and_or = 'and';
-  if(or) and_or = 'or';
 
+  var and_or = 'and';
   var res = true;
+  if(or) {
+    and_or = 'or';
+    res = false;
+  }
+
   for(var i = 0; i < condsLength; i++) {
     var enable = conds[i].querySelector('.opt-enable').checked;
     if(enable) {
@@ -28,9 +32,9 @@ function generateCondRes(logObj) {
       if(val === '') val = logObj[key];
       var eq_neq = conds[i].querySelector('.opt-eq').value;
       if(eq_neq === 'eq') {
-        res = (and_or == 'and') ? (res && (logObj[key] == val)) : logObj[key] == val;
+        res = (and_or == 'and') ? (res && (logObj[key] == val)) : (res || (logObj[key] == val));
       }else {
-        res = (and_or == 'and') ? (res && (logObj[key] != val)) : logObj[key] != val;
+        res = (and_or == 'and') ? (res && (logObj[key] != val)) : (res || (logObj[key] != val));
       }
     }
   }
