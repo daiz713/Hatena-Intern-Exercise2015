@@ -31,10 +31,12 @@ function generateCondRes(logObj) {
       var val = conds[i].querySelector('.opt-value').value;
       if(val === '') val = logObj[key];
       var eq_neq = conds[i].querySelector('.opt-eq').value;
+      var rg = new RegExp(val, 'i');
+      var objval = '' + logObj[key];
       if(eq_neq === 'eq') {
-        res = (and_or == 'and') ? (res && (logObj[key] == val)) : (res || (logObj[key] == val));
+        res = (and_or == 'and') ? (res && (objval.search(rg) != -1)) : (res || (objval.search(rg) != -1));
       }else {
-        res = (and_or == 'and') ? (res && (logObj[key] != val)) : (res || (logObj[key] != val));
+        res = (and_or == 'and') ? (res && (objval.search(rg) == -1)) : (res || (objval.search(rg) == -1));
       }
     }
   }
