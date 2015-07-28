@@ -33,7 +33,7 @@ sub path {
 sub uri {
   my $self = shift;
   my $host = $self->{host};
-  my $path =  $self->path;
+  my $path = $self->path;
   return "http://" . $host . $path;
 }
 
