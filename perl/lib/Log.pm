@@ -46,4 +46,25 @@ sub time {
   return $time;
 }
 
+# 課題2のテストで使う関数
+sub to_hash {
+  my $self = shift;
+  my $res = {
+    status  => $self->{status},
+    time    => $self->time,
+    method  => $self->method,
+    referer => $self->{referer},
+    size    => $self->{size},
+    uri     => $self->uri
+  };
+
+  # p.145
+  # あるキーがハッシュの中に存在するかどうかの判定
+  if(exists $self->{user}) {
+    $res->{user} = $self->{user};
+  }
+
+  return $res;
+}
+
 1;
