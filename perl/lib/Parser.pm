@@ -13,7 +13,7 @@ sub parse {
   my $file = $self->{filename};
   my $res = [];
   # ファイルを開く
-  open my $fh, '<', '../sample_data/log.ltsv' or die $!;
+  open my $fh, '<', $file or die $!;
   my @lines = <$fh>; # リストコンテキストなので(残りの)すべての行を配列として読み込む
 
   # 内容を一行ずつ見る
